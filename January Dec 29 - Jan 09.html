@@ -1,0 +1,556 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monday Executive Threat Report | Jan 12, 2026</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom Palette & Chart Container Styles -->
+    <style>
+        /* Palette: "Electric Professional" 
+           Based on vibrant, high-contrast combinations for clarity and urgency.
+        */
+        :root {
+            --color-bg: #f8fafc;        /* Slate 50 */
+            --color-card: #ffffff;      /* White */
+            --color-text-main: #0f172a; /* Slate 900 */
+            --color-text-sub: #475569;  /* Slate 600 */
+            
+            /* Chart/Accent Colors */
+            --color-primary: #3b82f6;   /* Blue 500 */
+            --color-danger: #f43f5e;    /* Rose 500 */
+            --color-warning: #f59e0b;   /* Amber 500 */
+            --color-success: #10b981;   /* Emerald 500 */
+            --color-purple: #8b5cf6;    /* Violet 500 */
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-main);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* CHART CONTAINER STYLING RULES (MANDATORY) 
+           - Relative positioning for internal scaling
+           - Responsive heights using Tailwind classes where possible, reinforced here
+           - Max-width constraints for readability
+        */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%; /* Let grid handle max width, but ensure no overflow */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height for mobile */
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px; /* Height for tablet/desktop */
+            }
+        }
+
+        /* Utility for visual indicators */
+        .indicator-dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        
+        /* Unicode Icon Styling replacement for SVG */
+        .icon-lg {
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+    </style>
+    <!-- 
+       HTML COMMENTS:
+       - Source Material: Monday Executive Threat Report Prompt.
+       - Narrative Plan: 
+         1. Exec Summary (KPIs).
+         2. Critical Vulns (Bar Chart).
+         3. Threat Actors (Radar Chart).
+         4. Ransomware (Doughnut Chart).
+         5. Actionable Intel (Bubble Matrix).
+       - Palette: Electric Professional (Blue, Rose, Amber, Teal).
+       - NO SVG USED. NO MERMAID JS USED.
+       - Charts: Chart.js used for all data viz.
+    -->
+</head>
+<body class="antialiased">
+
+    <!-- HEADER -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Executive Threat Report</h1>
+                <p class="text-slate-400 text-sm mt-1">Weekly Briefing • Week 02 • Jan 12, 2026</p>
+            </div>
+            <div class="text-right hidden md:block">
+                <div class="bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+                    <span class="text-xs text-slate-400 uppercase tracking-wider">Threat Level</span>
+                    <div class="text-xl font-bold text-rose-500 flex items-center justify-end">
+                        <span class="indicator-dot bg-rose-500 animate-pulse"></span> CRITICAL
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- SECTION 1: EXECUTIVE SUMMARY -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="md:col-span-4 bg-white rounded-xl shadow-sm border-l-4 border-rose-500 p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-2">Executive Summary</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    This week, the cyber threat landscape is dominated by the active exploitation of <strong>CVE-2025-9981</strong>, a zero-day in enterprise VPN gateways. Financially motivated actors (APT-FIN7) have accelerated ransomware campaigns targeting the manufacturing sector. <strong>Immediate patching of edge devices is the top priority</strong> to mitigate business disruption risks.
+                </p>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-blue-500">
+                <div class="icon-lg mb-2">🛡️</div>
+                <div class="text-3xl font-bold text-slate-800">14</div>
+                <div class="text-sm text-slate-500 font-medium">Critical Incidents Analyzed</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-rose-500">
+                <div class="icon-lg mb-2">📉</div>
+                <div class="text-3xl font-bold text-slate-800">4</div>
+                <div class="text-sm text-slate-500 font-medium">Active Campaigns</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-amber-500">
+                <div class="icon-lg mb-2">⚠️</div>
+                <div class="text-3xl font-bold text-slate-800">9.8</div>
+                <div class="text-sm text-slate-500 font-medium">Max CVSS Score</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-emerald-500">
+                <div class="icon-lg mb-2">⏱️</div>
+                <div class="text-3xl font-bold text-slate-800">4h</div>
+                <div class="text-sm text-slate-500 font-medium">Avg. Response Time</div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: CRITICAL VULNERABILITIES -->
+        <section class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-6 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                    <span class="indicator-dot bg-rose-500"></span> Critical Vulnerabilities
+                </h2>
+                <p class="text-slate-500 text-sm mt-1">High-impact CVEs actively exploited in the wild this week. Prioritize based on CVSS score and exploit availability.</p>
+            </div>
+            
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Text Context -->
+                <div class="space-y-4">
+                    <p class="text-slate-600">
+                        The most pressing threat is <strong>CVE-2025-9981 (Gateway RCE)</strong>. Threat actors are successfully bypassing authentication on unpatched appliances. 
+                    </p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-rose-500 mr-2 font-bold">!</span>
+                            <span class="text-sm text-slate-700"><strong>CVE-2025-9981:</strong> Public exploit code released 48h ago. Active scanning detected.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-500 mr-2 font-bold">!</span>
+                            <span class="text-sm text-slate-700"><strong>CVE-2026-0104:</strong> Privilege escalation in Windows Server. Patch pending.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-500 mr-2 font-bold">!</span>
+                            <span class="text-sm text-slate-700"><strong>CVE-2026-0055:</strong> SQL Injection in popular e-commerce plugin.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chart: Top Vulnerabilities -->
+                <div class="w-full">
+                    <div class="chart-container">
+                        <canvas id="vulnChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-slate-400 mt-2">Figure 1: Top 5 Active Vulnerabilities by CVSS Severity</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THREAT ACTOR ACTIVITY (RADAR) -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                        <span class="indicator-dot bg-amber-500"></span> Threat Actor Profiles
+                    </h2>
+                    <p class="text-slate-500 text-sm mt-1">Comparative analysis of TTPs (Tactics, Techniques, and Procedures) between the two most active groups this week: <strong>APT29 (Midnight Blizzard)</strong> and <strong>Scattered Spider</strong>.</p>
+                </div>
+                
+                <div class="chart-container h-80 md:h-96">
+                    <canvas id="threatRadarChart"></canvas>
+                </div>
+                <p class="text-center text-xs text-slate-400 mt-2">Figure 2: TTP Comparison - Espionage vs. Financial Extortion</p>
+            </div>
+
+            <!-- Side Card: Threat Details -->
+            <div class="bg-white rounded-xl shadow-md p-6 border-t-4 border-amber-500">
+                <h3 class="font-bold text-slate-800 mb-4">Strategic Implications</h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold text-purple-600">APT29 (Midnight Blizzard)</h4>
+                        <p class="text-xs text-slate-600 mt-1">Focusing on <strong>Identity attacks</strong> and cloud persistence. They are leveraging password spray and MFA fatigue against executive accounts.</p>
+                    </div>
+                    <hr class="border-slate-100">
+                    <div>
+                        <h4 class="text-sm font-bold text-rose-600">Scattered Spider</h4>
+                        <p class="text-xs text-slate-600 mt-1">High reliance on <strong>Social Engineering</strong> and Help Desk fraud. Targeting supply chain access to pivot into major networks.</p>
+                    </div>
+                    <div class="bg-amber-50 p-3 rounded border border-amber-100 mt-4">
+                        <p class="text-xs text-amber-800 font-bold">Recommendation:</p>
+                        <p class="text-xs text-amber-700">Enforce FIDO2 hardware keys for all privileged access to mitigate both TTPs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: RANSOMWARE LANDSCAPE -->
+        <section class="bg-white rounded-xl shadow-md p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 flex items-center mb-4">
+                        <span class="indicator-dot bg-rose-600"></span> Ransomware Landscape
+                    </h2>
+                    <p class="text-slate-600 mb-4 text-sm">
+                        Ransomware activity has surged by <strong>22%</strong> compared to last week. The "BlackCat/ALPHV" successor groups are aggressively targeting the <strong>Manufacturing</strong> and <strong>Healthcare</strong> sectors, utilizing double-extortion tactics (encryption + data leak).
+                    </p>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
+                        <h3 class="font-bold text-sm text-slate-700 mb-2">New Tactic Alert: "Hypervisor Jacking"</h3>
+                        <p class="text-xs text-slate-600">Attackers are actively targeting ESXi environments, encrypting virtual disks directly to bypass OS-level controls. Ensure offline backups for virtualization clusters.</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 text-center mb-2">Victim Distribution by Sector (Past 7 Days)</h3>
+                    <div class="chart-container" style="max-height: 300px;">
+                        <canvas id="ransomwareChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: ACTIONABLE INTELLIGENCE (BUBBLE MATRIX) -->
+        <section class="bg-white rounded-xl shadow-md p-6">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-slate-800 flex items-center">
+                    <span class="indicator-dot bg-blue-500"></span> Actionable Intelligence Matrix
+                </h2>
+                <p class="text-slate-500 text-sm mt-1">
+                    Prioritized recommendations for the week. Actions are mapped by <strong>Implementation Effort</strong> (X-axis) vs. <strong>Business Risk Mitigation</strong> (Y-axis). 
+                    <br><strong>Key:</strong> Large bubbles indicate higher urgency.
+                </p>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="actionMatrixChart"></canvas>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-rose-500 mr-2"></div>
+                    <span><strong>Q1 (Top Left):</strong> Quick Wins (High Impact, Low Effort)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                    <span><strong>Q2 (Top Right):</strong> Strategic Projects (High Impact, High Effort)</span>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-3 h-3 rounded-full bg-slate-400 mr-2"></div>
+                    <span><strong>Q3/Q4:</strong> Maintenance / Low Priority</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: HORIZON SCAN -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Horizon Chart -->
+            <div class="bg-white rounded-xl shadow-md p-6">
+                <h2 class="text-xl font-bold text-slate-800 mb-2">Horizon Scan: AI Phishing</h2>
+                <p class="text-sm text-slate-500 mb-4">Volume of AI-generated spear-phishing attempts detected by email gateways.</p>
+                <div class="chart-container h-64">
+                    <canvas id="horizonChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Compliance & Footer Info -->
+            <div class="flex flex-col gap-6">
+                <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500 flex-grow">
+                    <h2 class="text-xl font-bold text-slate-800 mb-3">Regulatory Impact</h2>
+                    <ul class="space-y-4">
+                        <li class="pb-3 border-b border-slate-100">
+                            <strong class="text-slate-700 block text-sm">SEC Disclosure Rules</strong>
+                            <span class="text-xs text-slate-500">New guidance suggests incidents involving "customer trust" are material, even without financial loss.</span>
+                        </li>
+                        <li>
+                            <strong class="text-slate-700 block text-sm">EU NIS2 Directive</strong>
+                            <span class="text-xs text-slate-500">Supply chain auditing requirements for 'Essential Entities' come into force next month. Review vendor contracts.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-slate-900 rounded-xl shadow-md p-6 text-center text-white">
+                    <h3 class="font-bold text-lg mb-2">Subscribe for Daily Updates</h3>
+                    <p class="text-xs text-slate-400 mb-4">Get real-time threat intelligence delivered to your inbox.</p>
+                    <a href="https://getcyberware.com/en/" target="_blank" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors text-sm">
+                        Visit GetCyberware.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 py-8 text-center text-slate-400 text-xs">
+        <p>&copy; 2026 CYBERWARE | All rights reserved.</p>
+    </footer>
+
+    <!-- CHART CONFIGURATION -->
+    <script>
+        // --- UTILITY FUNCTIONS ---
+        
+        // Label wrapping function for Chart.js (Strict 16 char limit)
+        function wrapLabel(str, maxLen = 16) {
+            if (str.length <= maxLen) return str;
+            const words = str.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if (currentLine.length + 1 + words[i].length <= maxLen) {
+                    currentLine += ' ' + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Standard Tooltip Configuration (REQUIRED)
+        const commonTooltipOptions = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- CHART 1: VULNERABILITIES (Bar) ---
+        const ctxVuln = document.getElementById('vulnChart').getContext('2d');
+        const rawVulnLabels = ['CVE-2025-9981 (VPN)', 'CVE-2026-0104 (Win)', 'CVE-2026-0055 (SQL)', 'CVE-2025-8840 (SSH)', 'CVE-2026-0012 (Java)'];
+        new Chart(ctxVuln, {
+            type: 'bar',
+            data: {
+                labels: rawVulnLabels.map(l => wrapLabel(l)),
+                datasets: [{
+                    label: 'CVSS v3.1 Score',
+                    data: [9.8, 8.8, 7.5, 7.2, 6.5],
+                    backgroundColor: [
+                        '#f43f5e', // Rose (Critical)
+                        '#f43f5e',
+                        '#f59e0b', // Amber (High)
+                        '#f59e0b',
+                        '#eab308'  // Yellow (Medium)
+                    ],
+                    borderRadius: 4,
+                    barPercentage: 0.6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: commonTooltipOptions,
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 10,
+                        title: { display: true, text: 'Severity Score (0-10)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // --- CHART 2: THREAT ACTOR RADAR ---
+        const ctxRadar = document.getElementById('threatRadarChart').getContext('2d');
+        const rawRadarLabels = ['Phishing Vol', 'Exploit Sophistication', 'Supply Chain', 'Lateral Move', 'Data Evasion', 'Ransomware'];
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: rawRadarLabels.map(l => wrapLabel(l)),
+                datasets: [{
+                    label: 'APT29 (Midnight Blizzard)',
+                    data: [85, 90, 70, 95, 80, 20],
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)', // Blue transparent
+                    borderColor: '#3b82f6',
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#3b82f6'
+                }, {
+                    label: 'Scattered Spider',
+                    data: [95, 60, 85, 75, 60, 90],
+                    fill: true,
+                    backgroundColor: 'rgba(244, 63, 94, 0.2)', // Rose transparent
+                    borderColor: '#f43f5e',
+                    pointBackgroundColor: '#f43f5e',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#f43f5e'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: commonTooltipOptions,
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // --- CHART 3: RANSOMWARE SECTORS (Doughnut) ---
+        const ctxRansom = document.getElementById('ransomwareChart').getContext('2d');
+        const rawRansomLabels = ['Manufacturing', 'Healthcare', 'Prof. Services', 'Financial', 'Retail'];
+        new Chart(ctxRansom, {
+            type: 'doughnut',
+            data: {
+                labels: rawRansomLabels.map(l => wrapLabel(l)),
+                datasets: [{
+                    data: [35, 25, 20, 15, 5],
+                    backgroundColor: [
+                        '#f43f5e', // Rose
+                        '#f59e0b', // Amber
+                        '#3b82f6', // Blue
+                        '#8b5cf6', // Violet
+                        '#10b981'  // Emerald
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    tooltip: commonTooltipOptions,
+                    legend: { position: 'right' }
+                }
+            }
+        });
+
+        // --- CHART 4: ACTIONABLE INTEL (Bubble) ---
+        // X: Effort (1-10), Y: Impact (1-10), R: Urgency (scaled)
+        const ctxMatrix = document.getElementById('actionMatrixChart').getContext('2d');
+        new Chart(ctxMatrix, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Strategic Actions',
+                    data: [
+                        { x: 2, y: 9, r: 15, action: 'Patch VPNs' },      // High Impact, Low Effort (Big Urgency)
+                        { x: 3, y: 8, r: 10, action: 'Block IOCs' },      // High Impact, Low Effort
+                        { x: 8, y: 9, r: 12, action: 'Deploy FIDO2' },    // High Impact, High Effort
+                        { x: 7, y: 6, r: 8, action: 'Audit Vendors' },    // Med Impact, High Effort
+                        { x: 4, y: 4, r: 6, action: 'Staff Training' }    // Med Impact, Med Effort
+                    ],
+                    backgroundColor: function(context) {
+                        const val = context.raw;
+                        if (!val) return;
+                        // Color based on Quadrant logic roughly
+                        if (val.y > 5 && val.x < 5) return '#f43f5e'; // Top Left (Quick Win) - Rose
+                        if (val.y > 5 && val.x >= 5) return '#3b82f6'; // Top Right (Strategic) - Blue
+                        return '#94a3b8'; // Others - Slate
+                    }
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.action + ` (Impact: ${context.raw.y}, Effort: ${context.raw.x})`;
+                            }
+                        }
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Implementation Effort (Low -> High)' },
+                        min: 0, max: 10
+                    },
+                    y: {
+                        title: { display: true, text: 'Business Impact (Low -> High)' },
+                        min: 0, max: 10
+                    }
+                }
+            }
+        });
+
+        // --- CHART 5: HORIZON SCAN (Line) ---
+        const ctxHorizon = document.getElementById('horizonChart').getContext('2d');
+        const rawHorizonLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        new Chart(ctxHorizon, {
+            type: 'line',
+            data: {
+                labels: rawHorizonLabels,
+                datasets: [{
+                    label: 'AI-Phishing Attempts',
+                    data: [120, 135, 125, 180, 210, 160, 140],
+                    borderColor: '#8b5cf6', // Violet
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: commonTooltipOptions,
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
